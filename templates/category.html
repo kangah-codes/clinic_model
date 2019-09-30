@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	  	<meta charset="UTF-8">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		<link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Montserrat:600,800&display=swap" rel="stylesheet">
+	</head>
+	<body>
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		  <a class="navbar-brand" href="#"><img src="{{ url_for('static', filename='img/logo1.svg') }}" style="width: 30px;height: 30px"></a>
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		    <span class="navbar-toggler-icon"></span>
+		  </button>
+
+		  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+		    <ul class="navbar-nav mr-auto">
+					<li class="nav-item">
+						<a class="nav-link" href="/home/{{ session }}">Home<span class="sr-only">(current)</span></a>
+					</li>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Patients
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="/ask_patient/{{ session }}">Patient Info</a>
+							<a class="dropdown-item" href="/patient_record/{{ session }}">Patient Records</a>
+						<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="/add_patient/{{ session }}">Add patient record</a>
+						</div>
+					</li>
+
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Departments
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							{% for i in dept %}
+								<a class="dropdown-item" href="/department/{{ i[0] }}/{{ session }}">{{ i[1] }}</a>
+							{% endfor %}
+						</div>
+					</li>
+
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Appointments
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="/appointment/{{ session }}">Appointment records</a>
+						<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="/add_appointment/{{ session }}">Add appointment record</a>
+						</div>
+					</li>
+
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Hospitalization
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="/hospitalization/{{ session }}">Hospitalization records</a>
+						<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="/add_hospitalization/{{ session }}">Add hospitalization record</a>
+						</div>
+					</li>
+
+					<li class="nav-item dropdown active">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Medication
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item active" href="/medications/{{ session }}">Medicine Index</a>
+						<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="/add_medication/{{ session }}">Add medication</a>
+							<a class="dropdown-item" href="/add_prescription/{{ session }}">Add prescription</a>
+						</div>
+					</li>
+
+				</ul>
+		    <form class="form-inline my-2 my-lg-0" action='/search_medication/{{ session }}' method="post">
+		      <input class="form-control mr-sm-2" type="search" placeholder="Search for a medicine..." aria-label="Search" name="search">
+		      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+		    </form>
+		  </div>
+		</nav>
+		<div class="container">
+			<div class="table-responsive">
+			<table class="table table-bordered">
+			  <thead class="thead-dark">
+			    <tr>
+			      <th scope="col">Batch number</th>
+			      <th scope="col">Category</th>
+			      <th scope="col">Name</th>
+			      <th scope="col">Expiry</th>
+			      <th scope="col">Amount in Stock</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			  	{% for i in info %}
+			    <tr>
+			      <th scope="row">{{ i[0] }}</th>
+			      <td>{{ i[1] }}</td>
+			      <td>{{ i[2] }}</td>
+			      <td class="bg-warning">{{ i[3] }}</td>
+			      <!-- Add if statement to show color based on stock-->
+			      {% set number = i[4] | int %}
+			      {% if number >= 20 %}
+			      	<td class="bg-success" style="color: white">{{ number }}</td>
+			      {% elif number >= 10 and number < 20 %}
+			      	<td class="bg-warning">{{ number }}</td>
+			      {% else %}
+			      	<td class="bg-danger" style="color:white">{{ number }}</td>
+			      {% endif %}
+			    </tr>
+			   	{% endfor %}
+			  </tbody>
+			</table>
+		</div>
+	</div>
+
+	</body>
+</html>
+
+
+
+

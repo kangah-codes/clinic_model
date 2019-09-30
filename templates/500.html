@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	  	<meta charset="UTF-8">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		<link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Montserrat:600,800&display=swap" rel="stylesheet">
+	</head>
+	<body>
+
+		<div class="container">
+			<center>
+				<img src="{{ url_for('static', filename='img/logo1.svg') }}" style="width: 30%;height: 30%">
+				<h1 style="padding: 30px">
+					The Server experienced an error, please wait and try again
+				</h1>
+				<h3><a href='/'>Go home</a></h3>
+			</center>
+		</div>
+	</body>
+</html>

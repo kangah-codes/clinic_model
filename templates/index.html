@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+  	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:600,800&display=swap" rel="stylesheet">
+    <meta name="google-site-verification" content="HKcOgmwO7RTg4ASwIemC3o3LMkoe-YdZ07bQxp7sFAU" />
+</head>
+<body>
+
+  <div class="container theme-showcase" role="main">
+    <div class="jumbotron">
+      <center>
+      <img src="{{ url_for('static', filename='img/logo1.svg') }}" style="width: 40%; height: 40%"><br>
+      <h1>Violet Clinic</h1>
+      <button class="btn btn-success" onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button><br>
+        </center>
+    </div>
+  </div>
+
+
+
+  <div id="id01" class="modal">
+    <form class="modal-content animate" method="post" onsubmit="document.getElementById('spin').style.display='block'">
+      <div class="container">
+        <label for="username"><b>Admin Username</b></label>
+        <input type="text" placeholder="Enter Username" name="username" required>
+
+        <label for="password"><b>Password</b></label>
+        <input type="password" placeholder="Enter Password" name="password" required>
+
+        <input type="submit" class="btn btn-success" value="Submit">
+        <button type="button" class="btn btn-danger" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+      <center><div class="spinner-border text-primary" id='spin' style="margin-top:10px"></div></center>
+      </div>
+    </form>
+  </div>
+
+  <p style="color: red">{{ error }}</p>
+
+  <script>
+    let modal = document.getElementById('id01');
+    let spinner = document.getElementById('spin');
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }else{
+            spinner.style.display = 'none';
+        }
+    }
+
+    let msg = document.getElementById('errormsg').innerHTML;
+
+    document.getElementById('msg').style.display = 'block';
+    document.getElementById('errormsg').style.display = 'none'
+    if (msg == 'error'){
+        document.getElementById('msg').style.display == 'block';
+    }else{
+      document.getElementById('msg').style.display == 'none';
+    }
+
+
+
+  </script>
+  <style type="text/css">
+    login{
+
+    }
+  </style>
+
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	  	<meta charset="UTF-8">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		<link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Montserrat:600,800&display=swap" rel="stylesheet">
+	</head>
+	<body>
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		  <a class="navbar-brand" href="#"><img src="{{ url_for('static', filename='img/logo1.svg') }}" style="width: 30px;height: 30px"></a>
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		    <span class="navbar-toggler-icon"></span>
+		  </button>
+
+		  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+		    <ul class="navbar-nav mr-auto">
+					<li class="nav-item">
+						<a class="nav-link" href="/home/{{ session }}">Home<span class="sr-only">(current)</span></a>
+					</li>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Patients
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="/ask_patient/{{ session }}">Patient Info</a>
+							<a class="dropdown-item" href="/patient_record/{{ session }}">Patient Records</a>
+						<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="/add_patient/{{ session }}">Add patient record</a>
+						</div>
+					</li>
+
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Departments
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							{% for i in dept %}
+								<a class="dropdown-item" href="/department/{{ i[0] }}/{{ session }}">{{ i[1] }}</a>
+							{% endfor %}
+						</div>
+					</li>
+
+					<li class="nav-item dropdown active">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Appointments
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="/appointment/{{ session }}">Appointment records</a>
+						<div class="dropdown-divider"></div>
+							<a class="dropdown-item active" href="/add_appointment/{{ session }}">Add appointment record</a>
+						</div>
+					</li>
+
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Hospitalization
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="/hospitalization/{{ session }}">Hospitalization records</a>
+						<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="/add_hospitalization/{{ session }}">Add hospitalization record</a>
+						</div>
+					</li>
+
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Medication
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="/medications/{{ session }}">Medicine Index</a>
+						<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="/add_medication/{{ session }}">Add medication</a>
+							<a class="dropdown-item" href="/add_prescription/{{ session }}">Add prescription</a>
+						</div>
+					</li>
+
+				</ul>
+		    <!-- <form class="form-inline my-2 my-lg-0">
+		      <input class="form-control mr-sm-2" type="search" placeholder="Search for a patient..." aria-label="Search">
+		      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+		    </form> -->
+		     <!-- <span class="navbar-text">
+		      <form class="form-inline my-2 my-lg-0">
+			      <input class="form-control mr-sm-2" type="search" placeholder="Search for a pat..." aria-label="Search">
+			      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+			    </form>
+		    </span> -->
+		  </div>
+		</nav>
+		<div class="container">
+			<form method="post">
+			  <div class="form-row">
+			    <div class="form-group col-xs-3">
+			    	<div class="formitem">
+					    <label>Date scheduled</label>
+					    <input type="date" class="form-control" placeholder="" name="date">
+					</div>
+			    	<div class="formitem">
+			    		<div class="form-group">
+						    <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Medical Officer</label>
+							  <select name="officer" required>
+							    <option selected>Choose...</option>
+							    {% for i in staff %}
+								    <option value="{{ i[0] }}">{{ i[1] }} {{ i[2] }} {{ i[3] }}</option>
+							    {% endfor %}
+							  </select>
+						  </div>
+					    <!-- <label>Medical Officer</label>
+					    <input type="text" class="form-control" placeholder="Medical Officer ID" name="officer"> -->
+					</div>
+					<div class="formitem">
+					    <label>Patient</label>
+					    <input type="text" class="form-control" placeholder="Patient ID" name="patient">
+					</div>
+					<div class="formitem">
+					    <label>Time</label>
+					    <input type="time" id="appt" name="time" min="09:00" max="15:00" required>
+					    <small class="form-text text-muted">Please use 24-hour time only</small>
+					</div>
+			  </div>
+			</div>
+
+			  <button type="submit" class="btn btn-primary" style="margin-top: 10px;margin-bottom: 10px;">Book Appointment</button>
+			</form>
+			{% if msg == 'success' %}
+				<div class="alert alert-success" role="alert">
+				  Booked appointment successfully
+				</div>
+			{% elif msg == 'error' %}
+				<div class="alert alert-danger" role="alert">
+				  Error booking appointment, try again
+				</div>
+			{% elif msg == 'nostaff' %}
+				<div class="alert alert-danger" role="alert">
+				  Staff doesn't exist, check ID and try again
+				</div>
+			{% elif msg == 'nopat' %}
+				<div class="alert alert-danger" role="alert">
+				  Patient does not exist, check ID and try again
+				</div>
+			{% endif %}
+		</div>
+	</body>
+</html>

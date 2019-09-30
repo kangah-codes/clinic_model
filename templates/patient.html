@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	  	<meta charset="UTF-8">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		<link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Montserrat:600,800&display=swap" rel="stylesheet">
+	</head>
+	<body>
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		  <a class="navbar-brand" href="#"><img src="{{ url_for('static', filename='img/logo1.svg') }}" style="width: 30px;height: 30px"></a>
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		    <span class="navbar-toggler-icon"></span>
+		  </button>
+
+		  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+		    <ul class="navbar-nav mr-auto">
+					<li class="nav-item">
+						<a class="nav-link" href="/home/{{ session }}">Home<span class="sr-only">(current)</span></a>
+					</li>
+					<li class="nav-item dropdown active">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Patients
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="/ask_patient/{{ session }}">Patient Info</a>
+							<a class="dropdown-item active" href="/patient_record/{{ session }}">Patient Records</a>
+						<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="/add_patient/{{ session }}">Add patient record</a>
+						</div>
+					</li>
+
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Departments
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							{% for i in dept %}
+								<a class="dropdown-item" href="/department/{{ i[0] }}/{{ session }}">{{ i[1] }}</a>
+							{% endfor %}
+						</div>
+					</li>
+
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Appointments
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="/appointment/{{ session }}">Appointment records</a>
+						<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="/add_appointment/{{ session }}">Add appointment record</a>
+						</div>
+					</li>
+
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Hospitalization
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="/hospitalization/{{ session }}">Hospitalization records</a>
+						<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="/add_hospitalization/{{ session }}">Add hospitalization record</a>
+						</div>
+					</li>
+
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Medication
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="/medications/{{ session }}">Medicine Index</a>
+						<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="/add_medication/{{ session }}">Add medication</a>
+							<a class="dropdown-item" href="/add_prescription/{{ session }}">Add prescription</a>
+						</div>
+					</li>
+
+				</ul>
+		  </div>
+		</nav>
+
+		<div class="container">
+		    <div class="row profile">
+				<div class="col-md-3" style="margin-bottom: 30px;">
+					<div class="profile-sidebar stuff">
+						<center>
+							<div class="profile-userpic">
+							    {% set id = pat[0] %}
+								<img src="/../static/uploads/{{ pat[0] }}.png" class="pic" alt="" id='pic' onerror='standby()'>
+								<script>
+								    function standby() {
+                                        document.getElementById('pic').src = '/../static/img/avatar.jpg'
+                                    }
+								</script>
+							</div>
+						</center>
+						<div class="profile-usertitle">
+							<div class="profile-usertitle-name">
+								Name: {{ pat[1] }} {{ pat[2] }}
+							</div>
+							<div class="profile-usertitle-job">
+								ID: {{ pat[0] }}<br>
+								Age: {{ pat[3] }}<br>
+								Sex: {{ pat[4] }}<br>
+								Address: {{ pat[5] }}<br>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-9">
+		            <div class="profile-content stuff">
+		            	<!-- <label><strong>Patient Record</strong></label><br>
+		            	<a href="#">Download Patient Record</a> -->
+					   <div class="table-responsive">
+							<table class="table table-bordered">
+							  <thead class="thead-dark">
+							  	<label><strong>Appointments</strong></label>
+							      <th scope="col">ID</th>
+							      <th scope="col">Date</th>
+							      <th scope="col">Supervising Medical Officer</th>
+							  </thead>
+							  <tbody>
+							  	{% for i in info[0] %}
+							    <tr>
+
+							      <th scope="row">{{ i[2] }}</th>
+							      <td class="bg-warning">{{ i[3] }}</td>
+							      <td>{{ i[1] }}</td>
+							    </tr>
+							    {% endfor %}
+							    <!-- <tr>
+							      <th scope="row">APT-122314</th>
+							      <td class="bg-warning">9/5/19</td>
+							      <td>Dr. akangah</td>
+							    </tr>
+							    <tr>
+							      <th scope="row">APT-122314</th>
+							      <td class="bg-warning">9/5/19</td>
+							      <td>Dr. akangah</td>
+							    </tr> -->
+							  </tbody>
+							</table>
+							<table class="table table-bordered">
+							  <thead class="thead-dark">
+							  		<label><strong>Hospital Stay</strong></label>
+							      <th scope="col">Ward</th>
+							      <th scope="col">Bed</th>
+							      <th scope="col">Date In</th>
+							      <th scope="col">Date Out</th>
+							  </thead>
+							  <tbody>
+							  	{% for i in info[1] %}
+							    <tr>
+							      <th scope="row">WARD-{{ i[1] }}</th>
+							      <td>{{ i[2] }}</td>
+							      <td class="bg-warning" >{{ i[3] }}</td>
+							      <td class="bg-success" >{{ i[4] }}</td>
+							    </tr>
+							    {% endfor %}
+							    <!-- <tr>
+							      <th scope="row">WARD-M8</th>
+							      <td>5</td>
+							      <td class="bg-warning" >23/6/19</td>
+							      <td class="bg-success" >23/8/19</td>
+							    </tr>
+							    <tr>
+							      <th scope="row">WARD-M8</th>
+							      <td>5</td>
+							      <td class="bg-warning" >23/6/19</td>
+							      <td class="bg-success" >23/8/19</td>
+							    </tr> -->
+							  </tbody>
+							</table>
+							<div class="table-responsive">
+							<table class="table table-bordered">
+							  <thead class="thead-dark">
+							  	<label><strong>Prescribed medications</strong></label>
+							  	<th scope="col">Prescription</th>
+							      <th scope="col">Name</th>
+							      <th scope="col">Prescribed by</th>
+							      <th scope="col">Date</th>
+							  </thead>
+							  <tbody>
+							  	{% for i in info[2] %}
+							    <tr>
+							      <th scope="row">{{ i[1] }}</th>
+							      <td scope="row">{{ i[2] }}</td>
+							      <td scope="row">{{ i[3] }}</td>
+							      <td scope="row">{{ i[4] }}</td>
+							    </tr>
+							    {% endfor %}
+							    <!-- <tr>
+							      <th scope="row">PRS-32543</th>
+							      <th scope="row">BATCH NO</th>
+							      <td scope="row">Paracetamol 500mg</td>
+							      <td scope="row">Dr. Ofosu</td>
+							      <td scope="row">2/2/19</td>
+							    </tr>
+							    <tr>
+							      <th scope="row">PRS-32543</th>
+							      <th scope="row">BATCH NO</th>
+							      <td scope="row">Paracetamol 500mg</td>
+							      <td scope="row">Dr. Ofosu</td>
+							      <td scope="row">2/2/19</td>
+							    </tr> -->
+							  </tbody>
+							</table>
+						</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

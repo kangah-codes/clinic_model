@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	  	<meta charset="UTF-8">
+	  	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		<link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Montserrat:600,800&display=swap" rel="stylesheet">
+    <!--jQuery-->
+ 	</head>
+	<body>
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		  <a class="navbar-brand" href="#"><img src="{{ url_for('static', filename='img/logo1.svg') }}" style="width: 30px;height: 30px"></a>
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		    <span class="navbar-toggler-icon"></span>
+		  </button>
+
+		  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+		    <ul class="navbar-nav mr-auto">
+					<li class="nav-item active">
+						<a class="nav-link active" href="/home/{{ session }}">Home<span class="sr-only">(current)</span></a>
+					</li>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Patients
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="/ask_patient/{{ session }}">Patient Info</a>
+							<a class="dropdown-item" href="/patient_record/{{ session }}">Patient Records</a>
+						<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="/add_patient/{{ session }}">Add patient record</a>
+						</div>
+					</li>
+
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Departments
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							{% for i in dept %}
+								<a class="dropdown-item" href="/department/{{ i[0] }}/{{ session }}">{{ i[1] }}</a>
+							{% endfor %}
+						</div>
+					</li>
+
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Appointments
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="/appointment/{{ session }}">Appointment records</a>
+						<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="/add_appointment/{{ session }}">Add appointment record</a>
+						</div>
+					</li>
+
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Hospitalization
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="/hospitalization/{{ session }}">Hospitalization records</a>
+						<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="/add_hospitalization/{{ session }}">Add hospitalization record</a>
+						</div>
+					</li>
+
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Medication
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="/medications/{{ session }}">Medicine Index</a>
+						<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="/add_medication/{{ session }}">Add medication</a>
+							<a class="dropdown-item" href="/add_prescription/{{ session }}">Add prescription</a>
+						</div>
+					</li>
+					{% if user == '1234' %}
+						<li class="nav-item">
+						    <a class="nav-link" href="/logs/{{ session }}">Logs<span class="sr-only">(current)</span></a>
+					    </li>
+					{% endif %}
+
+				</ul>
+		  </div>
+		  <span class="navbar-text">
+				<a href="/logout/{{ session }}">Logout</a>
+		</span>
+		</nav>
+
+		<style type="text/css">
+
+			body{
+				font-family: 'Montserrat', serif
+			}
+		</style>
+		<div class="container">
+			<div id="chartContainer" style="height: 300px; width: 100%;"></div>
+			<script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+			<script type="text/javascript" src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
+			<div id="doughchartContainer" style="height: 300px; width: 100%;margin-top:50px"></div>
+
+		</div>
+		<script>
+
+			window.onload = function () {
+
+			//Better to construct options first and then pass it as a parameter
+			var options = {
+				title: {
+					text: "Database statistics"
+				},
+				data: [
+				{
+					// Change type to "doughnut", "line", "splineArea", etc.
+					type: "column",
+					dataPoints: [
+						{ label: "patient_records",  y: {{ patients }}  },
+						{ label: "appointments", y: {{ appointment }}  },
+						{ label: "departments", y: 10  },
+						{ label: "hospitalization_records",  y: {{ stay }}  },
+						{ label: "staff",  y: {{ staff }}  },
+						{ label: "medicine_stock", y: {{ med }}}
+					]
+				}
+				]
+			};
+
+			$("#chartContainer").CanvasJSChart(options);
+			}
+
+// 			var dough = {
+//             	animationEnabled: true,
+//             	title: {
+//             		text: "Medicine Statistics"
+//             	},
+//             	data: [{
+//             		type: "doughnut",
+//             		innerRadius: "40%",
+//             		showInLegend: true,
+//             		legendText: "{label}",
+//             		indexLabel: "{label}: #percent%",
+//             		dataPoints: [
+//             			{% for i in count_med %}
+//                             { label: {{ i[0] }}, y: {{ i[1] }} },
+//                         {% endfor %}
+//             		]
+//             	}]
+//             };
+//             $("#doughchartContainer").CanvasJSChart(dough);
+
+//             }
+
+            var option = {
+            	animationEnabled: true,
+            	title: {
+            		text: "Medicine Statistics"
+            	},
+            	data: [{
+            		type: "doughnut",
+            		innerRadius: "40%",
+            		showInLegend: true,
+            		legendText: "{label}",
+            		indexLabel: "{label}: #percent%",
+            		dataPoints: [
+            			{% for i in count_med %}
+                             { label: "{{ i[0] }}", y: {{ i[1] }} },
+                        {% endfor %}
+            		]
+            	}]
+            };
+            $("#doughchartContainer").CanvasJSChart(option);
+        </script>
+	</body>
+</html>
